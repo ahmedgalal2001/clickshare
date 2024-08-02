@@ -1,4 +1,4 @@
-# Project Title ClickShare
+# ClickShare (User Roles and Permissions)
 
 This project is a web application built using Laravel, Alpine.js, Tailwind CSS, and Vite. It provides a robust and scalable foundation for building modern web applications with a focus on simplicity and performance. The application includes user authentication, role-based access control, and a responsive user interface.
 
