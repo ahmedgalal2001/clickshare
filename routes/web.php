@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AttributeController;
+use App\Http\Controllers\AttributeValueController;
+use App\Http\Controllers\BundleController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
@@ -10,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+
 
 
 Route::get('/dashboard', function () {
@@ -27,6 +34,23 @@ Route::middleware('auth')->group(function () {
         Route::get('/orders/charts', [OrderController::class, 'charts'])->name('order.charts');
         Route::get('orders/export', [OrderController::class, 'export']);
         Route::get('orders/search', [OrderController::class, 'search']);
+        Route::resource('categories', CategoryController::class);
+        Route::resource('bundles', BundleController::class);
+        Route::controller(AttributeController::class)->group(function () {
+            Route::get('attributes', [AttributeController::class, 'index'])->name('attributes.index');
+            Route::get('attributes/create', [AttributeController::class, 'create'])->name('attributes.create');
+            Route::post('attributes', [AttributeController::class, 'store'])->name('attributes.store');
+        });
+
+        Route::controller(AttributeValueController::class)->group(function () {
+            Route::get('attribute-values', [AttributeValueController::class, 'index'])->name('attribute-values.index');
+            Route::get('attribute-values/create', [AttributeValueController::class, 'create'])->name('attribute-values.create');
+            Route::post('attribute-values', [AttributeValueController::class, 'store'])->name('attribute-values.store');
+            Route::get('attribute-values/{attributeValue}', [AttributeValueController::class, 'show'])->name('attribute-values.show');
+            Route::get('attribute-values/{attributeValue}/edit', [AttributeValueController::class, 'edit'])->name('attribute-values.edit');
+            Route::post('attribute-values/{attributeValue}', [AttributeValueController::class, 'update'])->name('attribute-values.update');
+            Route::delete('attribute-values/{attributeValue}', [AttributeValueController::class, 'destroy'])->name('attribute-values.destroy');
+        });
     });
 
     Route::group(['middleware' => ['role:manager']], function () {
