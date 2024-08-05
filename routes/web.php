@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\AdminController;
-use App\Http\Controllers\GoogleSheetsController;
 use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaffController;
 use Illuminate\Support\Facades\Route;
@@ -11,7 +11,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/google-sheets', [GoogleSheetsController::class, 'index'])->name('google-sheets.index');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -24,6 +23,10 @@ Route::middleware('auth')->group(function () {
 
     Route::group(['middleware' => ['role:admin']], function () {
         Route::get('/admin', [AdminController::class, 'index']);
+        Route::get('/orders', [OrderController::class, 'index'])->name('order.index');
+        Route::get('/orders/charts', [OrderController::class, 'charts'])->name('order.charts');
+        Route::get('orders/export', [OrderController::class, 'export']);
+        Route::get('orders/search', [OrderController::class, 'search']);
     });
 
     Route::group(['middleware' => ['role:manager']], function () {
