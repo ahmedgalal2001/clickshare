@@ -4,7 +4,6 @@ namespace App\Services;
 
 use Google\Client;
 use Google\Service\Sheets;
-use Google\Service\Sheets\ValueRange;
 
 class GoogleSheetsServices
 {
@@ -20,7 +19,6 @@ class GoogleSheetsServices
     {
         $client = new Client();
         $client->setApplicationName('Google Sheets and PHP');
-        $client->setRedirectUri('http://localhost:8000/google-sheets');
         $client->setScopes(Sheets::SPREADSHEETS);
         $client->setAuthConfig(storage_path('credentials.json'));
         $client->setAccessType('offline');
