@@ -5,17 +5,18 @@ use App\Http\Controllers\AttributeController;
 use App\Http\Controllers\AttributeValueController;
 use App\Http\Controllers\BundleController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\LivewireOrderController;
 use App\Http\Controllers\ManagerController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaffController;
+use  App\Http\Livewire\OrderManagement;
+use App\Http\Livewire\OrderHistory;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
-
-
 
 
 
@@ -34,6 +35,13 @@ Route::middleware('auth')->group(function () {
         Route::get('/orders/charts', [OrderController::class, 'charts'])->name('order.charts');
         Route::get('orders/export', [OrderController::class, 'export']);
         Route::get('orders/search', [OrderController::class, 'search']);
+
+
+
+
+        Route::get('/livewire/orders/{order}/history', [LivewireOrderController::class, 'history'])->name('livewire.orders.history');
+        Route::get('/livewire/orders', [LivewireOrderController::class, 'index'])->name('livewire.orders.index');
+
 
         Route::controller(CategoryController::class)->group(function () {
             Route::get('categories', 'index')->name('categories.index');
