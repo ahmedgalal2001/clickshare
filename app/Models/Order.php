@@ -29,4 +29,19 @@ class Order extends Model
             'note' => $this->note,
         ];
     }
+    protected static function booted()
+    {
+        static::updated(function ($order) {
+            AuditLog::create([
+                'order_id' => $order->id,
+                'action' => 'updated',
+                'changes' => json_encode($order->getChanges()),
+            ]);
+        });
+    }
+
+    public function auditLogs()
+    {
+        return $this->hasMany(AuditLog::class);
+    }
 }
