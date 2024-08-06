@@ -34,22 +34,32 @@ Route::middleware('auth')->group(function () {
         Route::get('/orders/charts', [OrderController::class, 'charts'])->name('order.charts');
         Route::get('orders/export', [OrderController::class, 'export']);
         Route::get('orders/search', [OrderController::class, 'search']);
-        Route::resource('categories', CategoryController::class);
+
+        Route::controller(CategoryController::class)->group(function () {
+            Route::get('categories', 'index')->name('categories.index');
+            Route::get('categories/create', 'create')->name('categories.create');
+            Route::post('categories', 'store')->name('categories.store');
+            Route::get('categories/{category}',  'show')->name('categories.show');
+            Route::get('categories/{category}/edit',  'edit')->name('categories.edit');
+            Route::post('categories/{category}', 'update')->name('categories.update');
+            Route::delete('categories/{category}', 'destroy')->name('categories.destroy');
+        });
         Route::resource('bundles', BundleController::class);
+
         Route::controller(AttributeController::class)->group(function () {
-            Route::get('attributes', [AttributeController::class, 'index'])->name('attributes.index');
-            Route::get('attributes/create', [AttributeController::class, 'create'])->name('attributes.create');
-            Route::post('attributes', [AttributeController::class, 'store'])->name('attributes.store');
+            Route::get('attributes',  'index')->name('attributes.index');
+            Route::get('attributes/create', 'create')->name('attributes.create');
+            Route::post('attributes', 'store')->name('attributes.store');
         });
 
         Route::controller(AttributeValueController::class)->group(function () {
-            Route::get('attribute-values', [AttributeValueController::class, 'index'])->name('attribute-values.index');
-            Route::get('attribute-values/create', [AttributeValueController::class, 'create'])->name('attribute-values.create');
-            Route::post('attribute-values', [AttributeValueController::class, 'store'])->name('attribute-values.store');
-            Route::get('attribute-values/{attributeValue}', [AttributeValueController::class, 'show'])->name('attribute-values.show');
-            Route::get('attribute-values/{attributeValue}/edit', [AttributeValueController::class, 'edit'])->name('attribute-values.edit');
-            Route::post('attribute-values/{attributeValue}', [AttributeValueController::class, 'update'])->name('attribute-values.update');
-            Route::delete('attribute-values/{attributeValue}', [AttributeValueController::class, 'destroy'])->name('attribute-values.destroy');
+            Route::get('attribute-values', 'index')->name('attribute-values.index');
+            Route::get('attribute-values/create', 'create')->name('attribute-values.create');
+            Route::post('attribute-values', 'store')->name('attribute-values.store');
+            Route::get('attribute-values/{attributeValue}',  'show')->name('attribute-values.show');
+            Route::get('attribute-values/{attributeValue}/edit',  'edit')->name('attribute-values.edit');
+            Route::post('attribute-values/{attributeValue}', 'update')->name('attribute-values.update');
+            Route::delete('attribute-values/{attributeValue}', 'destroy')->name('attribute-values.destroy');
         });
     });
 
@@ -60,6 +70,10 @@ Route::middleware('auth')->group(function () {
     Route::group(['middleware' => ['role:staff']], function () {
         Route::get('/staff', [StaffController::class, 'index']);
     });
+});
+
+Route::fallback(function () {
+    return response()->view('errors.404', [], 404);
 });
 
 require __DIR__ . '/auth.php';
